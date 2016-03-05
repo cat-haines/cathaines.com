@@ -1,7 +1,5 @@
 # Harmony Jekyll theme general configurations
-
-# Base URL
-# baseurl:
+# baseurl: /
 
 # Site live URL
 url: http://cathaines.com
@@ -44,7 +42,7 @@ markdown: kramdown
 highlighter: pygments
 
 # Permalinks
-permalink: /:year/:month/:title.html
+permalink: /:year/:month/:title/
 
 exclude:
   - CNAME
