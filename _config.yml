@@ -47,11 +47,12 @@ permalink: /:year/:month/:title/
 exclude:
   - CNAME
   - Gemfile
+  - Gemfile.lock
   - Rakefile
   - README.md
   - .gitignore
   - .sass-cache
-  - Gemfile.lock
+  - vendor
 
 # Sass conversion configs
 sass:
