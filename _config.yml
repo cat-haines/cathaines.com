@@ -1,55 +1,52 @@
-# Harmony Jekyll theme general configurations 
+# Harmony Jekyll theme general configurations
 
 # Base URL
-baseurl: /harmony
+# baseurl:
 
 # Site live URL
-url: http://gayan.me
+url: http://cathaines.com
 
-# Localhost 
-# url: http://127.0.0.1:4000  
+# Localhost
+# url: http://127.0.0.1:4000
 
 # Harmony theme configuration. Please change accordingly.
 harmony:
-  name: Harmony
-  # Little description about your site
-  description: Harmony is free responsive jekyll theme.
-  # 'meta_description:' Write an awesome description for your new site here.
-  # It will appear in your document head meta (for Google search results) and 
+  name: Cat Haines
+  # description: Writings about code, community, and creativity.
+  # It will appear in your document head meta (for Google search results) and
   # in your feed.xml site description.
-  meta_description: > # 
-   Harmony is a free responsive jekyll theme by Gayan Virajith
-   and Maheshika Lakmali. Sourced on Github - 
-   https://github.com/gayanvirajith/harmony
-  basetheme: theme-base-01 # pre defined thmes are darken, blue-water, redish.
+  meta_description: > #
+   Personal home page of Cat Haines. I blog about code, community, and creativity.
+  basetheme: darken # pre defined thmes are darken, blue-water, redish.
+
   author: # Author details
-    name: Gayan Virajith
-    email: gayanvirajith@gmail.com
-    url: http://gayanvirajith.github.io
+    name: Cat Haines
+    email: haines2m@gmail.com
+    url: http://cathaines.com
+    signature: <3 Cat 😸
 
   # Google Analytics key, leave blank to ignore
-  google_analytics_key: UA-xxxx-x
+  google_analytics_key: UA-74437010-1
 
   # Profile links, leave blank to ignore
-  social: 
-    github: gayanvirajith
-    twitter: gayanvirajith
-    facebook: gayanvirajith
-    gplus: +GayanVirajith
-    dribble: gayan
-    pinterest: 
-  # Toggle disclaimer in footer
-  show_disclaimer: true
+  social:
+    github: cat-haines
+    twitter: _cathaines
+    medium: cathaines
+    # facebook:
+    # gplus: +
+    # dribble:
+    # pinterest:
 
-# Conversion / Build settings 
-markdown:    kramdown
+# Conversion / Build settings
+markdown: kramdown
 # This is how you put pygments config in jekyll 2.0 instead of pygments: true
-highlighter: pygments 
+highlighter: pygments
 
 # Permalinks
-permalink:        pretty
+permalink: /:year/:month/:title.html
 
-exclude: 
+exclude:
   - CNAME
   - Gemfile
   - Rakefile
@@ -60,5 +57,5 @@ exclude:
 
 # Sass conversion configs
 sass:
-    sass_dir: assets/css/_sass
-    style: :compressed
+  sass_dir: assets/css/_sass
+  style: :compressed
