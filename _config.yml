@@ -1,7 +1,5 @@
 # Harmony Jekyll theme general configurations
-
-# Base URL
-# baseurl:
+# baseurl: /
 
 # Site live URL
 url: http://cathaines.com
@@ -40,20 +38,20 @@ harmony:
 
 # Conversion / Build settings
 markdown: kramdown
-# This is how you put pygments config in jekyll 2.0 instead of pygments: true
-highlighter: pygments
+highlighter: rouge
 
 # Permalinks
-permalink: /:year/:month/:title.html
+permalink: /:year/:month/:title/
 
 exclude:
   - CNAME
   - Gemfile
+  - Gemfile.lock
   - Rakefile
   - README.md
   - .gitignore
   - .sass-cache
-  - Gemfile.lock
+  - vendor
 
 # Sass conversion configs
 sass:

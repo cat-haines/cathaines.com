@@ -1,8 +1,8 @@
 _site/
 .DS_Store
-.*.swp
-.idea
 .sass-cache/
+.jekyll-metadata
+tmp/
 *~
 bourbon/
-Gemfile.lock
+

@@ -8,7 +8,7 @@ categories:
 - thoughts
 ---
 
-When I'm in the mood for change, I usually try to create or advocate for small incremental steps rather than tearing down the existing structures and starting from scratch.. but sometimes, for a variety of reasons, I want to burn things to the ground.
+When I'm in the mood for change, I usually try to create or advocate for small incremental steps rather than tearing down the existing structures and starting from scratch.. but sometimes, for a variety of reasons, I just want to burn things to the ground.
 
 _I needed to burn some things down._
 
