@@ -10,9 +10,11 @@ categories:
 
 When I'm in the mood for change, I usually try to create or advocate for small incremental steps rather than tearing down the existing structures and starting from scratch.. but sometimes, for a variety of reasons, I just want to burn things to the ground.
 
-_I needed to burn some things down._
+<!-- more -->
 
-_I don't know why. I just do._
+*I needed to burn some things down.*
+
+*I don't know why. I just did.*
 
 That's actually a lie.. a tremendous amount of change has happened in my life over the past year. I found a new job, I feel short in some technical interviews in the process and lost faith in my technical abilities, I came out as trans, twice.. kind of, and I went through an intense, and very long bout of depression lasting the better part of the year.
 

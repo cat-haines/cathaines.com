@@ -4,6 +4,8 @@
 # Site live URL
 url: http://cathaines.com
 
+excerpt_separator: "<!-- more -->"
+
 # Localhost
 # url: http://127.0.0.1:4000
 
@@ -38,6 +40,8 @@ harmony:
 
 # Conversion / Build settings
 markdown: kramdown
+kramdown:
+  input: GFM
 highlighter: rouge
 
 # Permalinks
