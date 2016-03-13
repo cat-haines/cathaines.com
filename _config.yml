@@ -6,6 +6,12 @@ url: http://cathaines.com
 
 excerpt_separator: "<!-- more -->"
 
+gems:
+  - jekyll-redirect-from
+
+whitelist:
+  - jekyll-redirect-from
+
 # Localhost
 # url: http://127.0.0.1:4000
 

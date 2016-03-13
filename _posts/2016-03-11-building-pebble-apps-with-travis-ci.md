@@ -1,7 +1,8 @@
 ---
 layout: post
 title:  Building Pebble Apps with Travis CI
-date:   2016-02-28 11:22
+date:   2016-03-11 11:22
+redirect_from: "2016/02/building-pebble-apps-with-travis-ci/index.html"
 description:
  Automatically build your Pebble app when you make a commit, and track it's build status in your project's README.
 categories:
