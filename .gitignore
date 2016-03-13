@@ -5,3 +5,4 @@ _site/
 tmp/
 *~
 bourbon/
+Gemfile.lock
