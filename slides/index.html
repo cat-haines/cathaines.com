@@ -1,0 +1,21 @@
+---
+layout: page
+title: Slides
+description:
+  Some presentations I've given..
+permalink: /slides/
+---
+
+<section class="listing">
+  <ul>
+    {% for page in site.pages %}
+      {% if page.layout == 'slide' and page.title %}
+        <li>
+          <span>{{ page.date }} - <a class="page-link" href="{{ page.url | prepend: site.baseurl }}">
+            {{ page.title }}
+          </a></span>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</section>
