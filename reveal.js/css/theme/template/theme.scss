@@ -106,6 +106,7 @@ body {
 
 .reveal ul ul {
 	list-style-type: square;
+	font-size: 67.5%;
 }
 
 .reveal ul ul ul {
@@ -158,6 +159,7 @@ body {
 	position: relative;
 	width: 90%;
 	margin: $blockMargin auto;
+	margin-top: 40px;
 
 	text-align: left;
 	font-size: 0.55em;
@@ -267,23 +269,28 @@ body {
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
-	.reveal section img.plain {
-		border: 0;
-		box-shadow: none;
-	}
+.reveal section.plain img {
+	border: 0;
+	box-shadow: none;
+}
 
-	.reveal a img {
-		-webkit-transition: all .15s linear;
-		   -moz-transition: all .15s linear;
-		        transition: all .15s linear;
-	}
+.reveal section img.plain {
+	border: 0;
+	box-shadow: none;
+}
 
-	.reveal a:hover img {
-		background: rgba(255,255,255,0.2);
-		border-color: $linkColor;
+.reveal a img {
+	-webkit-transition: all .15s linear;
+	   -moz-transition: all .15s linear;
+	        transition: all .15s linear;
+}
 
-		box-shadow: 0 0 20px rgba(0, 0, 0, 0.55);
-	}
+.reveal a:hover img {
+	background: rgba(255,255,255,0.2);
+	border-color: $linkColor;
+
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.55);
+}
 
 
 /*********************************************

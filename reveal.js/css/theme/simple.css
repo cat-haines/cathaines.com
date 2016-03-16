@@ -99,7 +99,8 @@ body {
   list-style-type: disc; }
 
 .reveal ul ul {
-  list-style-type: square; }
+  list-style-type: square;
+  font-size: 67.5%; }
 
 .reveal ul ul ul {
   list-style-type: circle; }
@@ -143,6 +144,7 @@ body {
   position: relative;
   width: 90%;
   margin: 20px auto;
+  margin-top: 40px;
   text-align: left;
   font-size: 0.55em;
   font-family: monospace;
@@ -227,6 +229,10 @@ body {
   background: rgba(255, 255, 255, 0.12);
   border: 4px solid #000;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); }
+
+.reveal section.plain img {
+  border: 0;
+  box-shadow: none; }
 
 .reveal section img.plain {
   border: 0;

@@ -2,13 +2,15 @@
 layout: page
 title: Slides
 description:
-  Some presentations I've given..
+  Links to all my slides and CFPs
 permalink: /slides/
+regenerate: true
 ---
 
 <section class="listing">
   <ul>
     {% for page in site.pages %}
+      {% unless page.hidden %}
       {% if page.layout == 'slide' and page.title %}
         <li>
           <span>{{ page.date }} - <a class="page-link" href="{{ page.url | prepend: site.baseurl }}">
@@ -16,6 +18,7 @@ permalink: /slides/
           </a></span>
         </li>
       {% endif %}
+      {% endunless %}
     {% endfor %}
   </ul>
 </section>

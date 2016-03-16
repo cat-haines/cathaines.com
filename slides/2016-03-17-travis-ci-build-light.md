@@ -4,6 +4,8 @@ theme: blog
 transition: slide
 
 date: 2016-03-17
+hidden: true
+
 title: Tracking Travis Builds with RGB LEDs
 description: Nodebots workshop on creating a physical build indicator for
  Travis CI with IFTTT, Johnny-Five, and ngrok.
@@ -12,14 +14,14 @@ permalink: /slides/nodebots-travis-ci
 ---
 
 <section data-markdown>
-## Build A Johnny-Five Power Status Light For Your Travis CI Project
+## Build A Johnny-Five Powered Status Light For Your Travis CI Project
 
 NodeBotsSF | March 17, 2016
 
 </section>
 
 <section data-markdown>
-### Hi, I'm Cat 😸
+### 😸 Hi, I'm Cat 😸
 
 I'm on Twitter... [@_cathaines](https://twitter.com/_cathaines)
 
@@ -52,42 +54,58 @@ I'm on Twitter... [@_cathaines](https://twitter.com/_cathaines)
 </section>
 
 <section data-markdown>
-### What are we actually doing..
+### What are we doing tonight?
 
-- **A Johnny-Five Powered RGB LED Server**
-    + This probably sounds a lot cooler than it actually is
-- **Creating a basic Travis CI configuration**
-    + Scripts to change the LEDs color
-- **Creating a simple IFTTT Integration**
-    + This isn't really required, but adds flexibility
+- Configure a basic [Travis CI](https://travis-ci.org) build
+    + *This is generally useful to knowledge*
+- Create [IFTTT](https://ifttt.com) recipes for success & failure
+    + *This isn't required, but adds some flexibility (plus IFTTT is cool)*
+- Write a [Johnny-Five](https://github.com/rwaldron/johnny-five) powered RGB LED server
+    + *This sounds a lot more difficult than it is*
+- Use [ngrok](https://ngrok.com) to expose our RGB LED server
+    + *If we were using a Partical we could skip this step*
+- Connect [EVERYTHING](#) and celebrate 🎉
+    + This step is actually just copy/pasting some URLs (shh...)
+
+</section>
+
+
+<section data-markdown class="plain">
+### Wait, who is this Travis fellow?
+
+[Travis CI](https://travis-ci.org) is a continuous integration tool that enables developers to easily build, test, and deploy their code on an ongoing basis.
+
+![Build Status](../../assets/imgs/slides/nodebots-travis-ci/build-passing.svg)
+
+</section>
+
+<section data-markdown class="plain">
+
+![Google Search](../../assets/imgs/slides/nodebots-travis-ci/google.png)
 
 </section>
 
 <section data-markdown>
-### Travis CI
+### Configure a basic Travis CI Build
 
-![Build Status](https://travis-ci.org/cat-haines/cathaines.com.svg?branch=master)
-
-[Travis CI](https://travis-ci.org) is a continuous integration tool that works well with [GitHub](https://github.com) and can be easily setup to build and test a project each time a commit is pushed to GitHub.
-</section>
-
-<section data-markdown>
-
-![Travis Dashboard](../../assets/imgs/slides/nodebots-travis-ci/travis-dashboard.png)
+- Fork the [Johnny-Five Status Light](https://github.com/cat-haines/travis-light) project
+  + github.com/cat-haines/Johnny-Five-Status-Light
+- Create or log into your [Travis CI Account](https://travis-ci.org)
+  + travis-ci.org
+- [Enable the Travis Integration](https://travis-ci.org/profile) for the repo you forked
+  + travis-ci.org/profile
 
 </section>
 
 <section data-markdown>
-### Before we "start"
 
-- Fork the project - [github.com/cat-haines/travis-light](https://github.com/cat-haines/travis-light)
-- Create a Travis CI account - [travis-ci.org](https://travis-ci.org)
-- Enable the Travis Integration - [travis-ci.org/profile](https://travis-ci.org/profile)
+![Travis Profile](../../assets/imgs/slides/nodebots-travis-ci/travis-profile.png)
 
 </section>
 
 <section data-markdown>
-### .travis.yml defines the build
+### Configuring Build
+We configure our Travis builds with a [.travis.yml](#) file:
 
 ```yml
 # .travis.yml
@@ -106,42 +124,26 @@ script:         ./scripts/script.sh
 </section>
 
 <section data-markdown>
-### ./scripts folder has the details
+### Starting a Build!
 
-*before_install.sh*
+A build will be created each time we [push to any branch](#) in our project's GitHub repository. Let's start a build:
+
 ```bash
-#!/usr/bin/env bash
-set -e # halt script on error
-
-echo "Before Install Step..."
-```
-
-*install.sh*
-```bash
-#!/usr/bin/env bash
-set -e # halt script on error
-
-echo "Install Step..."
+$ echo "echo Hello Johnny!" >> ./scripts/build.sh
+$ git add ./scripts/build.sh
+$ git commit -m "my first travis build"
+$ git push origin master
 ```
 
 </section>
 
 <section data-markdown>
 
-### Let's trigger a build
+### Let's talk about IFTTT...
 
-- Modify a file
-- Commit the changes
-- Push the changes to GitHub
-- Enjoy the show (live build logs)
+[IFTTT](http://ifttt.com) - If this then that - makes is super simple to connect your favourite [apps and web services](https://ifttt.com/channels)!
 
-</section>
-
-<section data-markdown>
-
-### What about IFTTT??
-
-[IFTTT](http://ifttt.com) (If this then that) makes is super simple to connect your favourite [apps and web services](https://ifttt.com/channels)!
+*(IFTTT still isn't JavaScript.. shhh)*
 
 </section>
 
@@ -149,15 +151,165 @@ echo "Install Step..."
 
 ### Your First Recipe?
 
-- Enable the Maker Channel - [iftt.com/maker](http://ifttt.com/maker)
-- Create a Recipe - [ifttt.com/myrecipes/personal/new](https://ifttt.com/myrecipes/personal/new)
-    + **This:** Maker Channel
-        + **Event Name:** "build"
-    + **That:** SMS
-        + **Message:** "Build {%raw%}{{Value1}}{% endraw %} completed with status {%raw%}{{Value2}}{% endraw %}"
+- Create an [IFTTT Account](http://ifttt.com)
+  + iffft.com
+- Enable the [Maker Channel](http://ifttt.com/maker) & note your `key`
+  + iftt.com/maker
+- Create a [Recipe](https://ifttt.com/myrecipes/personal/new)
+  + ifttt.com/myrecipes/personal/new
+  + **IF THIS:** Maker Channel
+    + *Event Name:* "build_started"
+  + **Then THAT:** SMS
+    + *Message:* "A Travis build just started!!"
 
 </section>
 
 <section data-markdown>
 
-<section>
+### And now for a bit of magic 🎩
+
+```
+$ echo "- IFTTT_KEY={your maker key}" >> .travis.yml
+$ echo "curl https://maker.ifttt.com/trigger/\
+build_started/with/key/\$IFTTT_KEY" >> ./scripts/before_install.sh
+$ git add -A .
+$ git commit -m "Magic"
+$ git push origin master
+```
+
+* **NOTE**: Replace {your maker key} with the key.
+
+</section>
+
+<section data-markdown>
+
+###Isn't this a nodebots meetup?
+
+</section>
+
+<section data-markdown>
+
+![Circuit](../../assets/imgs/slides/nodebots-travis-ci/circuit.jpeg)
+
+</section>
+
+<section data-markdown>
+### `npm install --save johnny-five`
+
+</section>
+
+<section data-markdown>
+### Hello, Rainbow 🌈
+
+```js
+// index.js
+var five = require("johnny-five");
+var board = new five.Board();
+
+var rgb;
+
+board.on("ready", function() {
+  // Create an RGB LED ([RedPin, GreenPin, BluePin])
+  rgb = new five.Led.RGB([10,9,11]);
+
+  // Set the color, and switch between on/off every 500ms
+  rgb.color("#2a1c31");
+  rgb.strobe(500);
+});
+```
+
+</section>
+
+<section data-markdown>
+### Making a Server
+
+This probably isn't new to you...
+```js
+// bottom of index.js
+var http = require("http");
+
+var server = http.createServer(function(req, resp) {
+  var url = req.url.toLowerCase();
+  if (url.indexOf("/events/build/started") == 0) {
+    resp.end("Build Started");
+  } else if (url.indexOf("/events/build/success") == 0) {
+    resp.end("Build Successful");
+  } else if (url.indexOf("/events/build/failure") == 0) {
+    resp.end("Build Failed");
+  } else {
+    resp.end("Unknown event");
+  }
+}).listen(8000);
+console.log("Server listening on: http://localhost:8000");
+
+```
+
+</section>
+
+<section data-markdown>
+### Johnny-Five RGB LED Server
+
+```
+var server = http.createServer(function(req, resp) {
+  if (!rgb) {
+    resp.end("No board found...");
+    return;
+  }
+
+  var url = req.url.toLowerCase();
+  if (url.indexOf("/events/build/started") == 0) {
+    rgb.color("#FFFF00");
+    resp.end("Build Started");
+  } else if (url.indexOf("/events/build/success") == 0) {
+    rgb.color("#00FF00");
+    resp.end("Build Successful");
+  }
+  // ...
+});
+```
+
+</section>
+
+<section data-markdown>
+### Didn't You Mention ngrok
+
+```
+$ brew install ngrok
+$ ngrok http 8000
+
+ngrok by @inconshreveable                         (Ctrl+C to quit)
+                                                                   
+Tunnel Status         online
+Version               2.0.25/2.0.25
+Region                United States (us)
+Web Interface         http://127.0.0.1:4040
+Forwarding            http://c4774e1a.ngrok.io -> localhost:8000
+Forwarding            https://c4774e1a.ngrok.io -> localhost:8000
+                                                                   
+Connections           ttl     opn     rt1     rt5     p50     p90
+                      0       0       0.00    0.00    0.00    0.00
+
+```
+
+*Secure introspectable tunnels to localhost!!!*
+
+</section>
+
+<section data-markdown>
+### Putting it all together...
+
+- Add [curl](#) commands to our build_success and build_failure scripts
+- Create new [IFTTT recipes](https://ifttt.com/myrecipes/personal/new) that forward the requests to our ngrok server (via the *THAT Maker Channel*)
+- Push a commit, and watch the [magic](#) happen!
+</section>
+
+<section data-markdown>
+
+![Success!](http://i.giphy.com/q6QHDGE3X4EWA.gif)
+
+</section>
+
+<section data-markdown>
+### You Did It 🏆
+
+</section>
