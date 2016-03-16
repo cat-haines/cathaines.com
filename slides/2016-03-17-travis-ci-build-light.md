@@ -88,8 +88,8 @@ I'm on Twitter... [@_cathaines](https://twitter.com/_cathaines)
 <section data-markdown>
 ### Configure a basic Travis CI Build
 
-- Fork the [Johnny-Five Status Light](https://github.com/cat-haines/travis-light) project
-  + github.com/cat-haines/Johnny-Five-Status-Light
+- Fork the [Johnny-Five Build Light](https://github.com/cat-haines/johnny-five-build-light) project
+  + github.com/cat-haines/johnny-five-build-light
 - Create or log into your [Travis CI Account](https://travis-ci.org)
   + travis-ci.org
 - [Enable the Travis Integration](https://travis-ci.org/profile) for the repo you forked
@@ -310,6 +310,6 @@ Connections           ttl     opn     rt1     rt5     p50     p90
 </section>
 
 <section data-markdown>
-### You Did It 🏆
+### 🏆 You Did It 🏆
 
 </section>
