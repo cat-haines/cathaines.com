@@ -52,15 +52,10 @@ I'm on Twitter... [@_cathaines](https://twitter.com/_cathaines)
 ### What are we doing tonight?
 
 - Configure a basic [Travis CI](https://travis-ci.org) build
-    + *This is generally useful to knowledge*
 - Create [IFTTT](https://ifttt.com) recipes for success & failure
-    + *This isn't required, but adds some flexibility (plus IFTTT is cool)*
 - Write a [Johnny-Five](https://github.com/rwaldron/johnny-five) powered RGB LED server
-    + *This sounds a lot more difficult than it is*
 - Use [ngrok](https://ngrok.com) to expose our RGB LED server
-    + *If we were using a Partical we could skip this step*
 - Connect [EVERYTHING](#) and celebrate 🎉
-    + This step is actually just copy/pasting some URLs (shh...)
 
 </section>
 
@@ -136,7 +131,7 @@ $ git push origin master
 
 ### Let's talk about IFTTT...
 
-[IFTTT](http://ifttt.com) - If this then that - makes is super simple to connect your favourite [apps and web services](https://ifttt.com/channels)!
+[IFTTT](http://ifttt.com) - If this then that - makes it super simple to connect your favourite [apps and web services](https://ifttt.com/channels)!
 
 *(IFTTT still isn't JavaScript.. shhh)*
 
@@ -147,9 +142,9 @@ $ git push origin master
 ### Your First Recipe?
 
 - Create an [IFTTT Account](http://ifttt.com)
-  + iffft.com
+  + ifttt.com
 - Enable the [Maker Channel](http://ifttt.com/maker) & note your `key`
-  + iftt.com/maker
+  + ifttt.com/maker
 - Create a [Recipe](https://ifttt.com/myrecipes/personal/new)
   + ifttt.com/myrecipes/personal/new
   + **IF THIS:** Maker Channel
