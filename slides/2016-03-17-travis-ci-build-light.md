@@ -2,24 +2,19 @@
 layout: slide
 theme: blog
 transition: slide
-
-date: 2016-03-17
 hidden: true
 
-title: Tracking Travis Builds with RGB LEDs
+title: Build A Johnny-Five Powered Status Light For Your Travis CI Project
+event: NodeBotsSF
+date: 2016-03-17
+
 description: Nodebots workshop on creating a physical build indicator for
  Travis CI with IFTTT, Johnny-Five, and ngrok.
 
 permalink: /slides/nodebots-travis-ci
 ---
 
-<section data-markdown>
-## Build A Johnny-Five Powered Status Light For Your Travis CI Project
-
-NodeBotsSF | March 17, 2016
-
-</section>
-
+{% include title-slide.md %}
 <section data-markdown>
 ### 😸 Hi, I'm Cat 😸
 
