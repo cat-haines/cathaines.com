@@ -4,7 +4,6 @@ set -e # halt script on error
 rm -rf _site
 
 bundle exec jekyll build
-# bundle exec htmlproof ./_site
 
 cp CNAME _site/.
 cd _site
