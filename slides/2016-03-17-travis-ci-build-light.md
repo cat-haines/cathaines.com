@@ -307,4 +307,6 @@ Connections           ttl     opn     rt1     rt5     p50     p90
 <section data-markdown>
 ### 🏆 You Did It 🏆
 
+Here's the [complete code](https://github.com/cat-haines/johnny-five-build-light/tree/final) for tonight's project.
+
 </section>
