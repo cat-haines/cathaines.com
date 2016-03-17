@@ -265,7 +265,7 @@ var server = http.createServer(function(req, resp) {
 
 ```
 $ brew install ngrok
-$ ngrok http 8000
+$ ngrok 8000
 
 ngrok by @inconshreveable                         (Ctrl+C to quit)
                                                                    
