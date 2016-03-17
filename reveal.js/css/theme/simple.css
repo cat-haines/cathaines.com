@@ -248,6 +248,9 @@ body {
   border-color: #00008B;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.55); }
 
+.reveal section.no-caps code {
+  text-transform: lowercase; }
+
 /*********************************************
  * NAVIGATION CONTROLS
  *********************************************/

@@ -183,7 +183,7 @@ $ git push origin master
 
 </section>
 
-<section data-markdown>
+<section data-markdown class="no-caps">
 ### `npm install --save johnny-five`
 
 </section>
