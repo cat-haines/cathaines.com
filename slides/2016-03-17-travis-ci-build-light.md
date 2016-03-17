@@ -2,7 +2,6 @@
 layout: slide
 theme: blog
 transition: slide
-hidden: true
 
 title: Build A Johnny-Five Powered Status Light For Your Travis CI Project
 event: NodeBotsSF
