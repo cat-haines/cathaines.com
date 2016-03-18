@@ -43,7 +43,7 @@ I'm on Twitter... [@_cathaines](https://twitter.com/_cathaines)
 
 <section data-markdown>
 
-![Circuit](../../assets/imgs/slides/nodebots-travis-ci/circuit.jpeg)
+![Circuit](../../assets/imgs/slides/nodebots-travis-ci/circuit.jpg)
 
 </section>
 
@@ -178,7 +178,7 @@ $ git push origin master
 
 <section data-markdown>
 
-![Circuit](../../assets/imgs/slides/nodebots-travis-ci/circuit.jpeg)
+![Circuit](../../assets/imgs/slides/nodebots-travis-ci/circuit.jpg)
 
 </section>
 
