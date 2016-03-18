@@ -199,7 +199,7 @@ var rgb;
 
 board.on("ready", function() {
   // Create an RGB LED ([RedPin, GreenPin, BluePin])
-  rgb = new five.Led.RGB([10,9,11]);
+  rgb = new five.Led.RGB([11,10,9]);
 
   // Set the color, and switch between on/off every 500ms
   rgb.color("#2a1c31");
