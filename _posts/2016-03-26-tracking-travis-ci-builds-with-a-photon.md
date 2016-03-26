@@ -7,18 +7,20 @@ description:
 categories:
 - code
 - travis
-- nodebots
+- photon
 ---
 
 A couple weeks ago I ran a workshop at a [Nodebots meetup][meetup] about building a [Johnny-Five Powered Travis CI Build Indicator][slides]. One of the goals of the workshop was to introduce people to a bunch of cool tools they may or may not have used before.. [Travis CI][travis], [Johnny-Five][johnny-five], [IFTTT][ifttt], and [ngrok][ngrok].
 
-But the best tools are often not the most intereting.. so today we're going to rebuild this project with a [Photon][photon], and with simplicity in mind.
+Today we're going to look at how we can build the project with a [Photon][photon], a tiny bit of [Processing][processing], and some cURL commands!
 
 <!-- more -->
 
+**NOTE:** *This project assumes a basic understanding of Travis CI, and working with the Photon. If you are unfamiliar with these topics, I encourage you to checkout [Travis CI for Complete Beginners][travis-tutorial], and Particle's [Getting Started Guide][photon-tutorial].*
+
 ## The Photon Side of Things
 
-We're going to create a pretty standard circuit for an RGB LED, and flash our Proton with a tiny bit of code to control that LED through HTTP requests!
+We're going to create a basic circuit for an RGB LED, and flash our Proton with a tiny bit of code to control that LED through HTTP requests!
 
 ![Circuit](/assets/imgs/blog/2016-03-26/circuit.png)
 
@@ -61,11 +63,11 @@ int setColor(String color) {
 }
 ```
 
-We configure three pins as PWM outputs, and expose the `setColor` method as a [Cloud Function][particle-cloud-function], which will be accessible through the [Partical Cloud API][particle-cloud-api].
+The code is also pretty basic - we configure and initialize three output pins, then expose the `setColor` method as a [Cloud Function][particle-cloud-function], which will be accessible through the Partical's [Cloud API][particle-cloud-api].
 
 #### Testing Our Setup
 
-If you assembled your circuit correctly, and successfully flashed your device with the firmware code, you should be able to make the following requests to change the color of your LED:
+If you assembled your circuit correctly, and successfully flashed your device with the above firmware code, you should be able to make the following `cURL` requests to change the color of your LED:
 
 ```bash
 curl -X POST https://api.particle.io/v1/devices/$PARTICLE_DEVICE_ID/setcolor \
@@ -85,13 +87,13 @@ curl -X POST https://api.particle.io/v1/devices/$PARTICLE_DEVICE_ID/setcolor \
   -d arg=off
 ```
 
-*NOTE:* You'll need to replace `$PARTICLE_DEVICE_ID` and `$PARTICLE_TOKEN` with your Device ID and Particle API Token (or better yet, `export` the values as environment variables).
+**NOTE:** *You'll need to replace `$PARTICLE_DEVICE_ID` and `$PARTICLE_TOKEN` with your Device ID and Particle API Token (or better yet, `export` the values as environment variables).*
 
 ## Meanwhile, in Travis CI...
 
-With our Particle running the above code, creating a Travis CI integration becomes incredibly simple. All we need to do is make the same cURL requsts we did above at specific times during the build lifecycle.
+With our Particle running the above code, creating a Travis CI integration becomes incredibly simple. All we're going to do is make the same `cURL` requsts we did above, but at specific times throughout the build lifecycle.
 
-The first thing we'll need to do is add our API Token and Device ID to the `.travis.yml` file. Since this is sensitive information, we're going to use Travis' `encrypt` function:
+The first thing we'll need to do is add our API Token and Device ID to the `.travis.yml` file. Since this is sensitive information, we'll want to make use of Travis' `encrypt` function:
 
 ```bash
 travis encrypt PARTICLE_DEVICE_ID="your_device_id" --add env.global
@@ -107,7 +109,7 @@ env:
   - secure: g2Dqz+LIvGe2do6Z/hAnrQBAcJLS7w6eQli6Bn+wDc4V...
 ```
 
-Next, we'll create a bash script to wrap up our cURL command:
+Next, we'll create a bash script to wrap up our `cURL` command:
 
 ```
 #!/usr/bin/env bash
@@ -143,6 +145,9 @@ Happy Hacking!
 [ifttt]: https://ifttt.com
 [ngrok]: https://ngrok.com
 [photon]: https://docs.particle.io/guide/getting-started/intro/photon/
+[travis-tutorial]: https://docs.travis-ci.com/user/for-beginners
+[photon-tutorial]: https://docs.particle.io/guide/getting-started/start/core/
+[processing]: http://playground.arduino.cc/Interfacing/Processing
 [particle-cloud-function]: https://docs.particle.io/reference/firmware/photon/
 [particle-cloud-api]: https://docs.particle.io/reference/api/
 [final-project]: https://github.com/cat-haines/johnny-five-build-light/tree/photon/
