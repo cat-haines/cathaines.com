@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Building Pebble Apps with Travis CI</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Personal home page of Cat Haines. I blog about code, community, and creativity.
+">
+        <link rel="canonical"
+        href="/2016/03/building-pebble-apps-with-travis-ci/">
+
+        <!-- Harmony styles -->
+        <link rel="stylesheet" type="text/css" href="/assets/css/main.css">
+
+        <!-- Modernizr js -->
+        <script async src="/assets/js/modernizr.js"></script>
+
+        <!-- IE Fixes -->
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body class="darken">
+        <header class="main-header">
+            <div class="wc-container">
+                <h1><a href="/">Cat Haines</a></h1>
+                <h2></h2>
+                <ul>
+  <li><a href="/">Home</a><span>/</span></li>
+  <li><a href="/blog">Blog</a><span>/</span></li>
+  <li><a href="/slides">Slides</a><span>/</span></li>
+  <li><a href="/about">About</a><span>/</span></li>
+</ul>
+
+            </div>
+        </header>
+        <div class="page-content wc-container">
+	<div class="post">
+		<h1>Building Pebble Apps with Travis CI</h1>
+		<p class="post-meta">
+			
+      Filed under:
+      <span class="categories">
+      code, pebble, and travis
+      </span> |
+	    
+	    <span class="post-date">
+    	Mar 11, 2016
+	    </span>
+		</p>
+		<div class="post">
+			<p>I’ve been spending a fair bit of time tinkering with <a href="https://travis-ci.org">Travis CI</a> lately, and it’s probably pretty safe to say that it’s one of my favourite  tools at the moment. Travis CI, for those unfamiliar with it, is a <a href="https://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a> tool, it enables developers to easily build, test, and deploy their projects on an ongoing basis.</p>
+
+<p>In this post, we’re going to look at how to setup Travis CI to build a Pebble application.</p>
+
+<!-- more -->
+
+<h2 id="tldr">tl;dr</h2>
+
+<p>If you’re looking to get up and running as quickly as possible, you can follow these simple steps:</p>
+
+<ul>
+  <li>Fork the <a href="https://github.com/cat-haines/pebble-travis">pebble-travis</a> project.</li>
+  <li>Create a <a href="https://travis-ci.org">Travis CI</a> account if you don’t already have one.</li>
+  <li>Find the repository you just forked on your Travis CI <a href="https://travis-ci.org/profile/">profile page</a>.</li>
+  <li>Toggle the build switch for the repository.</li>
+</ul>
+
+<p><em>And that’s really all that’s required. Whenever you push a change to the cloned repository, it will kick off a new Travis CI build!!</em></p>
+
+<p>The rest of this blog post will look at how the actually integration works, and hopefully provide enough information to enable to you modify and extend the project to suite you specific needs.</p>
+
+<h2 id="before-we-get-started">Before We Get Started</h2>
+
+<p>In order to follow along with this blog post, you’re going to need a few things:</p>
+
+<ul>
+  <li>A <a href="https://github.com">GitHub</a> account</li>
+  <li>A <a href="https://travis-ci.org">Travis CI</a> account</li>
+  <li>A Pebble project hosted on GitHub</li>
+</ul>
+
+<p>We will also need to enable the Travis integration for the GitHub repo we want to build. Don’t worry - Travis and GitHub have a tight integration, and this step is almost non-existent: head over to your <a href="https://travis-ci.org/profile/">profile page</a> and “Flick the repository switch on.”</p>
+
+<h2 id="travisyml">.travis.yml</h2>
+
+<p>The next step is to create a <code class="highlighter-rouge">.travis.yml</code> file, which specifies what Travis CI will do when we push to GitHub. Here’s what our base file is going to look like:</p>
+
+<div class="language-yml highlighter-rouge"><pre class="highlight"><code><span class="s">sudo</span><span class="pi">:</span> <span class="s">false</span>
+
+<span class="s">language</span><span class="pi">:</span> <span class="s">python</span>
+<span class="s">python</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s">2.7</span>
+</code></pre>
+</div>
+
+<p>We’ve specified <code class="highlighter-rouge">sudo: false</code>, which tells Travis CI to build our project in a <a href="https://docs.travis-ci.com/user/ci-environment/#Virtualization-environments">container-based</a> (Linux) environment. Using a container-based environment ensures that our builds will spin up as quickly as possible after a commit has been pushed, but we won’t be allowed to use <code class="highlighter-rouge">sudo</code> in any of our scripts..</p>
+
+<p>We’ve also specified <code class="highlighter-rouge">language: python</code>. This may seem a bit odd at first glance, but since the Pebble Tool is written in Python, this will make installing the tool (and its dependencies) a <em>lot</em> simpler!</p>
+
+<h2 id="the-build-lifecycle">The Build Lifecycle</h2>
+
+<p><em>So what actually happens when a build is triggered in Travis CI?</em></p>
+
+<p>The first thing Travis does is look at the <code class="highlighter-rouge">.travis.yml</code> file to determine what environment and language the developer has selected. The combination of the environment and language determines what set of tools and resources come pre-installed in our build environment.</p>
+
+<p>Once the base environment has been setup, the <a href="https://docs.travis-ci.com/user/customizing-the-build/#The-Build-Lifecycle">build lifecycle</a> begins. Each step in the build lifecycle has a default command that can be overridden by specifying new behaviour in our config file. We’re going to add the following to the end of our <code class="highlighter-rouge">.travis.yml</code> file:</p>
+
+<div class="language-yml highlighter-rouge"><pre class="highlight"><code><span class="s">before_install</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s">echo before_install</span>
+<span class="s">install</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s">echo install</span>
+
+<span class="s">before_script</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s">echo before_script</span>
+<span class="s">script</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s">echo script</span>
+</code></pre>
+</div>
+
+<p>If we commit and push these changes, the resulting build should pass and include the following logs:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ python --version
+Python 2.7.9
+$ pip --version
+pip 6.0.7 from /home/travis/virtualenv/python2.7.9/lib/python2.7/site-packages (python 2.7)
+$ echo before_install
+$ echo install
+$ echo before_script
+$ echo script
+</code></pre>
+</div>
+
+<p>Now that we understand the basics of the build lifecycle, and the order in which scripts execute, we can prepare our project for a slightly more complex example. We’re going to create some custom bash scripts to be executed during the <code class="highlighter-rouge">install</code> and <code class="highlighter-rouge">script</code> steps, and use the <code class="highlighter-rouge">before_install</code> and <code class="highlighter-rouge">before_script</code> steps to grant them execute privileges:</p>
+
+<div class="language-yml highlighter-rouge"><pre class="highlight"><code><span class="c1"># Grant the install script execute privileges</span>
+<span class="s">before_install</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s">chmod +x ./scripts/ciinstall</span>
+
+<span class="c1"># Run a script to install our build chain</span>
+<span class="s">install</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s">./scripts/ciinstall</span>
+
+<span class="c1"># Grant the build script execute privileges</span>
+<span class="s">before_script</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s">chmod +x ./scripts/cibuild</span>
+
+ <span class="c1"># Run a script to build and test our project</span>
+<span class="s">script</span><span class="pi">:</span>
+ <span class="pi">-</span> <span class="s">./scripts/cibuild</span>
+</code></pre>
+</div>
+
+<p>The last thing we need to do to get this new build to work, is create <code class="highlighter-rouge">/scripts/ciinstall</code> and <code class="highlighter-rouge">/scripts/cibuild</code>. Here’s what they’re going to look like:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="c"># {project_root}/scripts/ciinstall</span>
+<span class="nb">set</span> -e <span class="c"># halt script on error</span>
+
+<span class="nb">echo </span>Hello Install Step
+</code></pre>
+</div>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="c">#!/usr/bin/env bash</span>
+<span class="c"># {project_root}/scripts/cibuild</span>
+<span class="nb">set</span> -e <span class="c"># halt script on error</span>
+
+<span class="nb">echo </span>Hello Script Step
+</code></pre>
+</div>
+
+<p>Adding these new files (along with the changes to our <code class="highlighter-rouge">.travis.yml</code>), and pushing them to GitHub should result in a successful build:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ python --version
+Python 2.7.9
+$ pip --version
+pip 6.0.7 from /home/travis/virtualenv/python2.7.9/lib/python2.7/site-packages (python 2.7)
+before_install
+$ chmod +x ./scripts/ciinstall
+$ ./scripts/ciinstall
+$ chmod +x ./scripts/cibuild
+$ ./scripts/cibuild
+
+The command "./scripts/cibuild" exited with 0.
+Done. Your build exited with 0.
+</code></pre>
+</div>
+
+<h2 id="installing-the-pebble-tool">Installing the Pebble Tool</h2>
+
+<p>We’re in great shape at this point. We could take our <code class="highlighter-rouge">.travis.yml</code> file along with our <code class="highlighter-rouge">/scripts</code> folder and use it as a starting point for just any project we want to build in Travis (we could just need to change the <code class="highlighter-rouge">language</code> if we were working with something other than Python).</p>
+
+<p>Let’s take a look at how we can extend our current Travis setup to install the Pebble Tool, and build our project!</p>
+
+<h3 id="download-and-install-the-pebble-tool">Download and install the Pebble Tool</h3>
+
+<p>First things first - we need to download and install the latest version of the Pebble Tool. To do this, we’ll add the following to the bottom of our <code class="highlighter-rouge">ciinstall</code> script:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>mkdir pebble-dev
+<span class="nb">cd </span>pebble-dev
+curl -O https://s3.amazonaws.com/assets.getpebble.com/pebble-tool/pebble-sdk-4.2-linux64.tar.bz2
+tar -jxf pebble-sdk-4.2-linux64.tar.bz2
+</code></pre>
+</div>
+
+<p>That was easy, but there’s one problem - we’ll need to update our <code class="highlighter-rouge">ciinstall</code> script every time there’s an update to the Pebble Tool. We want to avoid modifying our install script once it’s working, so we’re going to define what version of the Pebble Tool it should fetch through an <a href="https://docs.travis-ci.com/user/environment-variables/">environmental variable</a>. We can set the environmental variable by adding the following to the bottom of our <code class="highlighter-rouge">.travis.yml</code> file:</p>
+
+<div class="language-yml highlighter-rouge"><pre class="highlight"><code><span class="s">env</span><span class="pi">:</span>
+  <span class="s">global</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">PEBBLE_TOOL=4.2</span>
+</code></pre>
+</div>
+
+<p>This allows us to rewrite our <code class="highlighter-rouge">ciinstall</code> with $PEBBLE_TOOL in place of “4.2”:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>mkdir pebble-dev
+<span class="nb">cd </span>pebble-dev
+curl -O https://s3.amazonaws.com/assets.getpebble.com/pebble-tool/pebble-sdk-<span class="nv">$PEBBLE_TOOL</span>-linux64.tar.bz2
+tar -jxf pebble-sdk-<span class="nv">$PEBBLE_TOOL</span>-linux64.tar.bz2
+</code></pre>
+</div>
+
+<h3 id="download-and-install-python-libraries">Download and Install Python Libraries</h3>
+
+<p>The next step in the install guide tells us to install Python 2.7, and pip. We’re able to skip this step since Python 2.7 and pip will come pre-installed in our Travis CI environment. We do however, still need to perform the <code class="highlighter-rouge">virtualenv</code> step, so we’ll add the following to the bottom of <code class="highlighter-rouge">ciinstall</code>:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nb">cd </span>pebble-sdk-<span class="nv">$PEBBLE_TOOL</span>-linux64
+virtualenv --no-site-packages .env
+<span class="nb">source</span> .env/bin/activate
+pip install -r requirements.txt
+deactivate
+</code></pre>
+</div>
+
+<h3 id="install-pebble-emulator-dependencies">Install Pebble Emulator Dependencies</h3>
+
+<p>Finally, we need to install the emulator’s dependencies with <code class="highlighter-rouge">apt-get</code>. The guide tells us to run <code class="highlighter-rouge">sudo apt-get install libsdl1.2debian libfdt1 libpixman-1-0</code>, which we can’t do, as we’re not allowed to use <code class="highlighter-rouge">sudo</code>.</p>
+
+<p>Instead, we’re going to specify the packages in our configuration file and let Travis take care of installing them for us. We can do this by adding the following to the bottom of our <code class="highlighter-rouge">.travis.yml</code> file:</p>
+
+<div class="language-yml highlighter-rouge"><pre class="highlight"><code><span class="s">addons</span><span class="pi">:</span>
+  <span class="s">apt</span><span class="pi">:</span>
+    <span class="s">sources</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">libsdl1.2debian</span>
+      <span class="pi">-</span> <span class="s">libfdt1</span>
+      <span class="pi">-</span> <span class="s">libpixman-1-0</span>
+</code></pre>
+</div>
+
+<h2 id="building-a-pebble-app">Building a Pebble App</h2>
+
+<p>Now that our build environment has the latest version of the Pebble Tool installed, building out project is as simple as adding the following line to our <code class="highlighter-rouge">cibuild</code> script:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># Pipe 'yes' into pebble tool to accept terms and conditions
+yes | ./pebble-dev/pebble-sdk-$PEBBLE_TOOL-linux64/bin/pebble build
+</code></pre>
+</div>
+
+<p>This command will build your Pebble project (and automagically answer ‘yes’ when the Pebble Tool asks whether you accept the terms and conditions). Assuming we’ve done everything correctly, we should get a passing build and the following logs (which I’ve tidied up so you don’t need to scroll as far):</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ chmod +x ./scripts/cibuild
+$ ./scripts/cibuild
+Pebble collects metrics on your usage of our developer tools.
+We use this information to help prioritise further development of our tooling.
+
+If you cannot respond interactively, create a file called ENABLE_ANALYTICS or
+NO_TRACKING in '/home/travis/.pebble-sdk/'.
+
+Would you like to opt in to this collection? [y/n] No SDK installed; installing the latest one...
+To use the Pebble SDK, you must agree to the following:
+
+PEBBLE TERMS OF USE
+https://developer.getpebble.com/legal/terms-of-use
+
+PEBBLE DEVELOPER LICENSE
+https://developer.getpebble.com/legal/sdk-license
+
+Do you accept the Pebble Terms of Use and the Pebble Developer License? (y/n) Downloading...
+100%[======================================================]   3.78 MB/s Done.
+
+...
+
+-------------------------------------------------------
+APLITE APP MEMORY USAGE
+Total size of resources:        4092 bytes / 125KB
+Total footprint in RAM:         855 bytes / 24KB
+Free RAM available (heap):      23721 bytes
+-------------------------------------------------------
+-------------------------------------------------------
+CHALK APP MEMORY USAGE
+Total size of resources:        4092 bytes / 256KB
+Total footprint in RAM:         855 bytes / 64KB
+Free RAM available (heap):      64681 bytes
+-------------------------------------------------------
+-------------------------------------------------------
+BASALT APP MEMORY USAGE
+Total size of resources:        4092 bytes / 256KB
+Total footprint in RAM:         855 bytes / 64KB
+Free RAM available (heap):      64681 bytes
+-------------------------------------------------------
+
+...
+
+'build' finished successfully (0.427s)
+
+
+The command "./scripts/cibuild" exited with 0.
+
+Done. Your build exited with 0.
+</code></pre>
+</div>
+
+<h2 id="whats-next">What’s Next</h2>
+
+<p>This is intended to be the first step towards a continuous <strong>delivery</strong> solution for Pebble apps - but the next step, automatically publishing a new release to the appstore, is a bit tricky at the moment.. But don’t worry, we’ll come back to that in a future post!</p>
+
+
+			 <3 Cat 😸 
+		</div>
+	</div>
+
+
+	
+	<div class="related">
+		<h4>Related Posts</h2>
+		<ul class="posts">
+		    
+		    <li>
+			  <span>26 Mar 2016 &raquo;</span>
+			  <a href="/2016/03/tracking-travis-ci-builds-with-a-photon/">Tracking Travis CI Builds with a Photon</a>
+		    </li>
+		    
+		    <li>
+			  <span>28 Feb 2016 &raquo;</span>
+			  <a href="/2016/02/starting-over/">Starting over</a>
+		    </li>
+		    
+		</ul>
+	</div>
+	
+
+	<div class="post-footer">
+		<div class="column-1">
+			
+				<a href="/2016/02/starting-over/"><< Older</a>
+			
+		</div>
+		<div class="column-2"><a href="/">Home</a></div>
+		<div class="column-3">
+			
+				<a href="/2016/03/tracking-travis-ci-builds-with-a-photon/">Newer >></a>
+			
+		</div>
+	</div>
+</div>
+
+        <footer class="main-footer">
+            <div class="wc-container">
+                <div class="column one">
+                    <h6>Few more links</h6>
+<ul class="menu">
+    <li><a href="/about">About</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/slides">Slides</a></li>
+    <li><a href="https://jekyllrb.com/">Jekyll</a></li>
+</ul>
+
+                </div>
+                <div class="column two">
+                    <h6>Follow me</h6>
+
+<ul class="social-media">
+
+    
+    <li>
+        <a title="_cathaines Twitter"
+            href="https://twitter.com/_cathaines"
+            class="twitter wc-img-replace" target="_blank">Twitter</a>
+    </li>
+    
+
+    
+    <li>
+        <a title="cathaines on Medium"
+            href="https://medium.com/@cathaines"
+            class="medium wc-img-replace" target="_blank">Medium</a>
+    </li>
+    
+
+    
+    <li>
+        <a title="cat-haines on Github"
+            href="https://github.com/cat-haines"
+            class="github wc-img-replace" target="_blank">Github</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+    
+
+</ul>
+
+                </div>
+            </div>
+            <p class="wc-container disclaimer">
+                
+            </p>
+        </footer>
+        <script type="text/javascript">
+          /* To avoid render blocking css */
+          var cb = function() {
+            var l = document.createElement('link'); l.rel = 'stylesheet';
+            l.href = 'http://fonts.googleapis.com/css?family=Ubuntu+Mono&subset=latin';
+            var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
+          };
+          var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+              webkitRequestAnimationFrame || msRequestAnimationFrame;
+          if (raf) raf(cb);
+          else window.addEventListener('load', cb);
+        </script>
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <!-- When no internet load JQuery from local -->
+        <script>window.jQuery || document.write('<script src="/assets/js/jquery.min.js"><\/script>')</script>
+        <!-- Site js -->
+        <script src="/assets/js/all.js"></script>
+        <!-- Google analytics  -->
+        
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-74437010-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+    </body>
+</html>
